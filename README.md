@@ -19,7 +19,7 @@ The quickest way to get started is to just run `npx serve` in your project's dir
 If you prefer, you can also install the package globally using [Yarn](https://yarnpkg.com/en/) (you'll need at least [Node.js LTS](https://nodejs.org/en/)):
 
 ```bash
-yarn global add serve
+yarn global add @yinshipeng/serve
 ```
 
 Once that's done, you can run this command inside your project's directory:
@@ -69,10 +69,7 @@ server.listen(3000, () => {
 
 After that, you can use the `serve` command everywhere. [Here](https://github.com/zeit/serve/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+for+beginners%22)'s a list of issues that are great for beginners.
 
-## Credits
-
-This project used to be called "list" and "micro-list". But thanks to [TJ Holowaychuk](https://github.com/tj) handing us the new name, it's now called "serve" (which is much more definite).
 
 ## Author
 
-Leo Lamprecht ([@notquiteleo](https://twitter.com/notquiteleo)) - [ZEIT](https://zeit.co)
+[yinshipeng](https://github.com/yinshipeng/)

@@ -87,7 +87,10 @@ const getHelp = () => chalk`
 
       --no-etag                           Send \`Last-Modified\` header instead of \`ETag\`
 
-      -S, --symlinks                      Resolve symlinks instead of showing 404 errors
+	  -S, --symlinks                      Resolve symlinks instead of showing 404 errors
+	  
+	  -C, --cors                          Enable CORS via the "Access-Control-Allow-Origin" header
+	                                      Optionally provide CORS headers list separated by commas
 
   {bold ENDPOINTS}
 
@@ -121,27 +124,27 @@ const parseEndpoint = (str) => {
 	const url = parse(str);
 
 	switch (url.protocol) {
-		case 'pipe:': {
-			// some special handling
-			const cutStr = str.replace(/^pipe:/, '');
+	case 'pipe:': {
+		// some special handling
+		const cutStr = str.replace(/^pipe:/, '');
 
-			if (cutStr.slice(0, 4) !== '\\\\.\\') {
-				throw new Error(`Invalid Windows named pipe endpoint: ${str}`);
-			}
-
-			return [cutStr];
+		if (cutStr.slice(0, 4) !== '\\\\.\\') {
+			throw new Error(`Invalid Windows named pipe endpoint: ${str}`);
 		}
-		case 'unix:':
-			if (!url.pathname) {
-				throw new Error(`Invalid UNIX domain socket endpoint: ${str}`);
-			}
 
-			return [url.pathname];
-		case 'tcp:':
-			url.port = url.port || '5000';
-			return [parseInt(url.port, 10), url.hostname];
-		default:
-			throw new Error(`Unknown --listen endpoint scheme (protocol): ${url.protocol}`);
+		return [cutStr];
+	}
+	case 'unix:':
+		if (!url.pathname) {
+			throw new Error(`Invalid UNIX domain socket endpoint: ${str}`);
+		}
+
+		return [url.pathname];
+	case 'tcp:':
+		url.port = url.port || '5000';
+		return [parseInt(url.port, 10), url.hostname];
+	default:
+		throw new Error(`Unknown --listen endpoint scheme (protocol): ${url.protocol}`);
 	}
 };
 
@@ -177,8 +180,8 @@ const startEndpoint = (endpoint, config, args, previous) => {
 	const compress = args['--no-compression'] !== true;
 
 	const server = http.createServer(async (request, response) => {
-		if (args["--cors"]) {
-			response.setHeader("Access-Control-Allow-Origin", "*");
+		if (args['--cors']) {
+			response.setHeader('Access-Control-Allow-Origin', '*');
 		}
 
 		if (compress) {
@@ -296,12 +299,12 @@ const loadConfig = async (cwd, entry, args) => {
 
 		try {
 			switch (file) {
-				case 'now.json':
-					content = content.static;
-					break;
-				case 'package.json':
-					content = content.now.static;
-					break;
+			case 'now.json':
+				content = content.static;
+				break;
+			case 'package.json':
+				content = content.now.static;
+				break;
 			}
 		} catch (err) {
 			continue;
